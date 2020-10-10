@@ -1,0 +1,14 @@
+{
+    "Name": "Simber's Sharpshooter",
+    "Author": "Simber",
+    "Description": "A port of the Black ops 1/2 Sharpshooter game mode made by Simber",
+    "Tags": ["sharpshooter"],
+    "Version": "0.0.1",
+    "URL":"https://github.com/Simber1/VU-Sharpshooter",
+    "HasVeniceEXT": true,
+    "HasWebUI": false,
+    "Dependencies": {
+        "veniceext": "^1.0.0"
+    }
+    
+}
