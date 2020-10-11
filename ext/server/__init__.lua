@@ -114,7 +114,7 @@ function SharpshooterServer:GenerateWeapon()
     local possibleRails = {}
     local possibleAmmos = {}
     
-    if self.unlockTables[currentWeaponName] ~=nil then
+    if self.unlockTables[currentWeaponName] ~=nil then --Make sure the weapons can take attachments
         for i=1, #self.sightTable do
             if self.unlockTables[currentWeaponName][self.sightTable[i]] ~= nil then
                 table.insert(possibleSights, self.unlockTables[currentWeaponName][self.sightTable[i]])
@@ -170,11 +170,12 @@ function SharpshooterServer:EngineTick(deltaTime)
     self.TimeWaited = self.TimeWaited + deltaTime
     if self.TimeWaited >= 1 then
         print(self.SecondsWaited)
-        if self.SecondsWaited >= 15 then
+        if self.SecondsWaited >= 45 then
             print("45 second loop")
             self.SecondsWaited = 0
             self:GenerateWeapon()
             self:ReplaceAllWeapons()
+            NetEvents:Broadcast('TimerUpdate', self.SecondsWaited)
             --Spawn new weapon
             --Hand out new weapon
         else
@@ -182,6 +183,7 @@ function SharpshooterServer:EngineTick(deltaTime)
             self.SecondsWaited = self.SecondsWaited + 1
             self.TimeWaited = 0
             -- Update Client Timer
+            NetEvents:Broadcast('TimerUpdate', self.SecondsWaited)
         end
     end
 end
