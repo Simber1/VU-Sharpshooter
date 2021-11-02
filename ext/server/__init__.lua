@@ -79,12 +79,11 @@ function SharpshooterServer:OnLevelLoaded()
 		end
     end
     self:GenerateWeapon()
-    self.SecondsWaited = -15 --Hacking work around for timer starting too soon, timer starts before server is even accepting connections, this resets it to -15 when the server reloads
+    self.SecondsWaited = -15 --Hacky work around for timer starting too soon, timer starts before server is even accepting connections, this resets it to -15 when the server reloads
 end
 
 
 function SharpshooterServer:Respawn(player)
-    print("On Spawn Firing")
     if player.soldier == nil then
         print("Soldier didn't exist")
     end
@@ -95,7 +94,6 @@ function SharpshooterServer:Respawn(player)
         timeDelayed = timeDelayed + deltaTime
         if self.PlayerSpawn == true then
             if timeDelayed >= 0.09 then
-                print("Delayed spawn")
                 self:ReplaceWeapons(player)
                 timeDelayed = 0
                 self.PlayerSpawn = false
@@ -109,6 +107,7 @@ function SharpshooterServer:GenerateWeapon()
     math.randomseed(SharedUtils:GetTimeMS())
     local currentWeaponName = self.weaponNameTable[math.random(#self.weaponNameTable)]
     self.currentWeapon = self.weaponTable[currentWeaponName]
+
     local possibleSights = {}
     local possibleBarrels = {}
     local possibleRails = {}
@@ -171,19 +170,17 @@ function SharpshooterServer:EngineTick(deltaTime)
     if self.TimeWaited >= 1 then
         print(self.SecondsWaited)
         if self.SecondsWaited >= 45 then
-            print("45 second loop")
             self.SecondsWaited = 0
             self:GenerateWeapon()
             self:ReplaceAllWeapons()
-            NetEvents:Broadcast('TimerUpdate', self.SecondsWaited)
+            NetEvents:Broadcast('TimerUpdate', math.floor(self.SecondsWaited))
             --Spawn new weapon
             --Hand out new weapon
         else
-            print("1 second loop")
             self.SecondsWaited = self.SecondsWaited + 1
             self.TimeWaited = 0
             -- Update Client Timer
-            NetEvents:Broadcast('TimerUpdate', self.SecondsWaited)
+            NetEvents:Broadcast('TimerUpdate', math.floor(self.SecondsWaited))
         end
     end
 end
