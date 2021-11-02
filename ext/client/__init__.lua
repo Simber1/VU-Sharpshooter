@@ -17,7 +17,7 @@ function SharpshooterClient:WebUIInit()
 end
 
 function SharpshooterClient:TimerUpdate(Time)
-    Execute = 'setTimer("Time till next weapon: '..45-Time..'");'
+    Execute = 'setTimer("'..45-Time..'");'
     WebUI:ExecuteJS(Execute)
     WebUI:Show()
 end
